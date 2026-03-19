@@ -10,7 +10,9 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -45,6 +47,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -338,6 +341,24 @@ public class WebviewActivity extends AppCompatActivity implements NavigationView
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem kb_toggle = menu.findItem(R.id.toggle_keyboard);
+        Drawable icon = AppCompatResources.getDrawable(this, R.drawable.ic_toggle_keyboard);
+        if (icon != null && !mSharedPrefs.getBoolean("keyboardEnabled", true)) {
+            int new_color;
+            if (mSharedPrefs.getBoolean("darkMode", true)) {
+                new_color = Color.parseColor("#3377f6"); // cyan
+            } else {
+                new_color = Color.parseColor("#000000");
+            }
+            icon.setColorFilter(new_color, PorterDuff.Mode.SRC_IN);
+            kb_toggle.setIcon(icon);
+        }
+
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.toggle_keyboard:
@@ -499,6 +520,7 @@ public class WebviewActivity extends AppCompatActivity implements NavigationView
             inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
         }
         mSharedPrefs.edit().putBoolean("keyboardEnabled", enable).apply();
+        invalidateOptionsMenu();
     }
 
     private void setAppbarEnabled(boolean enable) {
