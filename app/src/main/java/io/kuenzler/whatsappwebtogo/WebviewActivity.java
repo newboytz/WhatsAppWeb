@@ -3,6 +3,8 @@ package io.kuenzler.whatsappwebtogo;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -19,6 +21,7 @@ import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -38,6 +41,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebStorage;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.AdapterView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -177,6 +181,9 @@ public class WebviewActivity extends AppCompatActivity implements NavigationView
         mWebView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
         mWebView.setScrollbarFadingEnabled(true);
 
+        mWebView.setLongClickable(true);
+        registerForContextMenu(mWebView);
+
         mWebView.setWebChromeClient(new WebChromeClient() {
 
             @Override
@@ -308,6 +315,54 @@ public class WebviewActivity extends AppCompatActivity implements NavigationView
         }
 
         mWebView.getSettings().setUserAgentString(USER_AGENT);
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+
+        WebView.HitTestResult result = ((WebView) v).getHitTestResult();
+        int type = result.getType();
+        String extra = result.getExtra();
+
+        MenuItem.OnMenuItemClickListener copyHandler = new MenuItem.OnMenuItemClickListener() {
+            public boolean onMenuItemClick(MenuItem item) {
+                Log.d(DEBUG_TAG, extra);
+                ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newUri(getContentResolver(),
+                        "URL from WhatsApp Web To Go",
+                        Uri.parse(extra));
+                clipboard.setPrimaryClip(clip);
+                return true;
+            }
+        };
+
+        MenuItem.OnMenuItemClickListener shareHandler = new MenuItem.OnMenuItemClickListener() {
+            public boolean onMenuItemClick(MenuItem item) {
+                Log.d(DEBUG_TAG, extra);
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, extra);
+                sendIntent.setType("text/plain");
+
+                Intent shareIntent = Intent.createChooser(sendIntent, null);
+                startActivity(shareIntent);
+
+                return true;
+            }
+        };
+
+        switch (type) {
+            case WebView.HitTestResult.SRC_ANCHOR_TYPE:
+            case WebView.HitTestResult.IMAGE_TYPE:
+            case WebView.HitTestResult.EMAIL_TYPE:
+            case WebView.HitTestResult.PHONE_TYPE:
+            case WebView.HitTestResult.GEO_TYPE:
+                menu.setHeaderTitle(extra);
+                menu.add(1, 1, 0, "Copy").setOnMenuItemClickListener(copyHandler);
+                menu.add(1, 2, 0, "Share").setOnMenuItemClickListener(shareHandler);
+                break;
+        }
     }
 
     @Override
