@@ -295,12 +295,6 @@ public class WebviewActivity extends AppCompatActivity implements NavigationView
             }
         });
 
-        if (savedInstanceState == null) {
-            loadWhatsapp();
-        } else {
-            Log.d(DEBUG_TAG, "savedInstanceState is present");
-        }
-
         // set version of local webview to user agent to avoid outdated agent
         PackageInfo webviewPackageInfo = WebViewCompat.getCurrentWebViewPackage(getApplicationContext());
         if (webviewPackageInfo != null && !webviewPackageInfo.versionName.isEmpty()) {
@@ -308,6 +302,25 @@ public class WebviewActivity extends AppCompatActivity implements NavigationView
         }
 
         mWebView.getSettings().setUserAgentString(USER_AGENT);
+
+        // check for intent
+        Intent intent = getIntent();
+        if (intent != null && !Intent.ACTION_MAIN.equals(intent.getAction()) ) {
+            handleIntents(intent);
+            return;
+        }
+
+        if (savedInstanceState == null) {
+            loadWhatsapp();
+        } else {
+            Log.d(DEBUG_TAG, "savedInstanceState is present");
+        }
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        handleIntents(intent);
     }
 
     @Override
@@ -353,6 +366,32 @@ public class WebviewActivity extends AppCompatActivity implements NavigationView
                 break;
         }
         return true;
+    }
+
+    private void handleIntents(Intent intent) {
+        try {
+            if (intent == null) {
+                return;
+            }
+
+            Uri appLinkData = intent.getData();
+            String host = appLinkData.getHost();
+
+            if (Objects.equals(host, "wa.me")) {
+                String phoneNumber = appLinkData.getPathSegments().get(0);
+                String msgText = appLinkData.getQueryParameter("text");
+                mWebView.loadUrl("https://" + WHATSAPP_WEB_BASE_URL + "/send/?phone=" +
+                        phoneNumber + "&text=" + (msgText != null ? msgText : "") +
+                        "&type=phone_number&app_absent=0");
+            } else if (Objects.equals(host, "chat.whatsapp.com")) {
+                String groupId = appLinkData.getLastPathSegment();
+                mWebView.loadUrl("https://" + WHATSAPP_WEB_BASE_URL + "/accept?code=" + groupId);
+            } else {
+                mWebView.loadUrl(appLinkData.toString());
+            }
+        } catch (Exception e) {
+            Log.e(DEBUG_TAG, "Handling intent failed", e);
+        }
     }
 
     private boolean checkPermission(String permission) {
