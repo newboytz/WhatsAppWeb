@@ -1,0 +1,44 @@
+<resources>
+    <string name="app_name" translatable="false">WhatsApp Web To Go</string>
+    <string name="appversion_semantic" translatable="false">1.7.5</string>
+    <string name="versionInfoText" translatable="false">Thanks for updating!\nNew in version 1.7.5:\n&#8211;Fix outdated useragent (dynamic creation)\n&#8211;add dutch tranlations (thanks @Japie3krekel)\n&#8211;add missing strings to translation files (thanks @Japie3krekel)</string>
+
+    <string name="introInfoText">תודה על ההתקנה! פשוט חבר את הטלפון שלך כפי שהיית עושה עם המחשב שלך. כדי לנעול ולפתוח את המקלדת, השתמש בלחצן המקלדת למעלה מימין. ההגדרות שלך יישמרו.</string>
+    <string name="aboutText" translatable="false">WhatsApp Web To Go\n\nby Leonhard Künzler\nandroid@kuenzler.io\n\ngithub.com/92lleo/WhatsappWebToGo\n\nBuy me a coffee: (app will always stay free)\npaypal.me/leokuenzler\n\n© 2017&#8211;2025\n\nv1.7.5\n\nThis app is in no way affiliated with WhatsApp Inc. The rights for WhatsApp and WhatsApp Web belong to WhatsApp Inc. This app is a private project to enable the use of WhatsApp Web on Android devices.</string>
+
+    <string name="navigation_drawer_open">פתח את מגירת הניווט</string>
+    <string name="navigation_drawer_close">סגור את מגירת הניווט</string>
+    <string name="sidebar_button_logout">התנתק</string>
+    <string name="sidebar_button_reload">טעינה מחדש</string>
+    <string name="sidebar_title_settings">הגדרות</string>
+    <string name="sidebar_button_settings">@string/sidebar_title_settings</string>
+    <string name="appbar_button_scroll_left">גלול שמאלה</string>
+    <string name="appbar_title_scroll_right">גלול ימינה</string>
+    <string name="appbar_button_toggle_keyboard">החלף מצב מקלדת</string>
+    <string name="toast_saved_to_downloads_folder">שמור בתיקיית ההורדות</string>
+    <string name="notification_title_tap_to_open">הקש כדי לפתוח</string>
+    <string name="notification_text_saved_as">נשמר כ-%s</string>
+    <string name="navigation_drawer_close_confirm">לחץ שוב כדי לסגור</string>
+    <string name="reload_required">יש לטעון מחדש כדי שהאפליקציה תמשיך לפעול</string>
+    <string name="permission_denied_download">לא ניתנה הרשאה, לא ניתן להוריד</string>
+    <string name="unblock_keyboard">מבטל חסימת מקלדת...</string>
+    <string name="dismiss">שחרר</string>
+    <string name="block_keyboard">חוסם מקלדת...</string>
+    <string name="logging_out">מתנתק...</string>
+    <string name="logout_title">האם אתה רוצה להתנתק?</string>
+    <string name="logout_message">בעת היציאה, תצטרכו לסרוק שוב את קוד ה-QR באמצעות הטלפון שלכם כדי להתחבר ל-Whatsapp Web.</string>
+    <string name="yes_button">כן</string>
+    <string name="no_button">לא</string>
+    <string name="appbar_hiding">מסתיר... החלק ימינה כדי להציג את סרגל הניווט</string>
+    <string name="reloading">טוען מחדש...</string>
+    <string name="ok_button">אוקיי</string>
+    <string name="permission_denied_cam">לא ניתנה הרשאה, לא ניתן להשתמש ב</string>
+    <string name="camera">מצלמה</string>
+    <string name="microphone">מיקרופון</string>
+    <string name="permission_denied_video">לא ניתנה הרשאה, לא ניתן להשתמש בוידאו.</string>
+    <string name="sidebar_button_toggle_dark_mode">שנה מצב לילה</string>
+    <string name="sidebar_button_about">אודות</string>
+    <string name="sidebar_button_new_session">סשן חדש</string>
+    <string name="sidebar_button_switch_session">החלף סשן</string>
+    <string name="sidebar_button_toggle_appbar_visibility">שנה נראות הסרגל</string>
+</resources>
