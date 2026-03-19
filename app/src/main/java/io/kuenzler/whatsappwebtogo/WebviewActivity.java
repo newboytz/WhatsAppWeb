@@ -75,10 +75,8 @@ public class WebviewActivity extends AppCompatActivity implements NavigationView
     private static final String WHATSAPP_HOMEPAGE_URL = "https://www.whatsapp.com/";
 
     private static final String WHATSAPP_WEB_BASE_URL = "web.whatsapp.com";
-    private static final String WORLD_ICON = "\uD83C\uDF10";
     private static final String WHATSAPP_WEB_URL = "https://" + WHATSAPP_WEB_BASE_URL
-            + "/" + WORLD_ICON + "/"
-            + Locale.getDefault().getLanguage();
+            + "/?locale=" + Locale.getDefault().getLanguage();
 
     private static final int FILECHOOSER_RESULTCODE        = 200;
     private static final int CAMERA_PERMISSION_RESULTCODE  = 201;
