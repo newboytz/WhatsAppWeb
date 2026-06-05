@@ -3,6 +3,7 @@ package io.kuenzler.whatsappwebtogo;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -279,7 +280,11 @@ public class WebviewActivity extends AppCompatActivity implements NavigationView
                     return super.shouldOverrideUrlLoading(view, request);
                 } else {
                     Intent intent = new Intent(Intent.ACTION_VIEW, url);
-                    startActivity(intent);
+                    try {
+                        startActivity(intent);
+                    } catch (ActivityNotFoundException e) {
+                        showToast(R.string.no_app_to_open_link);
+                    }
                     return true;
                 }
             }

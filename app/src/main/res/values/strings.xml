@@ -41,4 +41,5 @@
     <string name="camera">camera</string>
     <string name="microphone">microphone</string>
     <string name="permission_denied_video">Permission not granted, can\'t use video.</string>
+    <string name="no_app_to_open_link">No app found to open this link</string>
 </resources>
