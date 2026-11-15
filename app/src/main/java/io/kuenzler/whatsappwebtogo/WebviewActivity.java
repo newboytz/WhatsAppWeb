@@ -63,9 +63,8 @@ import java.util.Objects;
 
 public class WebviewActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    private static final String CHROME_TEMPLATE = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/%s Safari/537.36";
-    private static final String CHROME_VERSION_FALLBACK = "125.0.6422.148";
-    private static String USER_AGENT = String.format(CHROME_TEMPLATE, CHROME_VERSION_FALLBACK);
+    // Badilisha kwenda Microsoft Edge kwenye Windows (Desktop Engine)
+    private static final String USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36 Edg/125.0.2535.92";
 
     private static final String STORAGE_PERMISSION = Manifest.permission.WRITE_EXTERNAL_STORAGE; // "android.permission.WRITE_EXTERNAL_STORAGE"
     private static final String CAMERA_PERMISSION = Manifest.permission.CAMERA; // "android.permission.CAMERA"
@@ -172,7 +171,8 @@ public class WebviewActivity extends AppCompatActivity implements NavigationView
         mWebView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
         mWebView.getSettings().setNeedInitialFocus(false);
         mWebView.getSettings().setGeolocationEnabled(true);
-        mWebView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
+        // Weka Layout Algorithm kuwa NORMAL ili isilazimishe muonekano wa simu
+        mWebView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NORMAL);
 
         mWebView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
         mWebView.setScrollbarFadingEnabled(true);
@@ -253,6 +253,17 @@ public class WebviewActivity extends AppCompatActivity implements NavigationView
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
                 view.scrollTo(0, 0);
+
+                // Dunga JavaScript ya kujificha kuwa Windows Desktop kabisa
+                view.loadUrl("javascript:(function() {" +
+                        "   try {" +
+                        "       Object.defineProperty(navigator, 'platform', { get: function() { return 'Win32'; } });" +
+                        "       Object.defineProperty(navigator, 'vendor', { get: function() { return 'Google Inc.'; } });" +
+                        "       Object.defineProperty(navigator, 'userAgentData', { get: function() { " +
+                        "           return { brands: [{brand: 'Not/A)Brand', version: '8'}, {brand: 'Microsoft Edge', version: '125'}, {brand: 'Chromium', version: '125'}], mobile: false, platform: 'Windows' }; " +
+                        "       } });" +
+                        "   } catch(e) {}" +
+                        "})();");
 
                 setContentSize(view);
                 if (mDarkMode) {
