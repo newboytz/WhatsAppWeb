@@ -1,5 +1,5 @@
 # Built application files
-*.apk
+#*.apk
 *.aar
 *.ap_
 *.aab
@@ -11,10 +11,10 @@
 *.class
 
 # Generated files
-bin/
-gen/
-out/
-release/
+#bin/
+#gen/
+#out/
+#release/
 #exported-apk/
 
 # Gradle files
