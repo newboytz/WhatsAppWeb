@@ -1,6 +1,8 @@
 apply plugin: 'com.android.application'
 
 android {
+    namespace 'io.kuenzler.whatsappwebtogo'
+    
     compileSdkVersion 29
     defaultConfig {
         applicationId "io.kuenzler.whatsappwebtogo"
