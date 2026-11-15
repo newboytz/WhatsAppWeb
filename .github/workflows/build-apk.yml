@@ -1,0 +1,62 @@
+name: Build Android APK
+
+on:
+  push:
+    branches: [ main, master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '17'
+
+    - name: Setup Android SDK
+      uses: android-actions/setup-android@v3
+      with:
+        accept-android-sdk-licenses: true
+        packages: 'platforms;android-34 build-tools;34.0.0 platform-tools'
+
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+
+    - name: Clean and Build Debug APK
+      run: |
+        ./gradlew clean
+        ./gradlew assembleDebug
+
+    - name: Upload APK Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: app-debug-apk
+        path: app/build/outputs/apk/debug/app-debug.apk
+
+    - name: Tengeneza folda maalum ya apk ndani ya repo
+      run: |
+        mkdir -p exported-apk
+        
+        # Tafuta na ukilipe faili la APK lililojengwa kwenda kwenye folda mpya
+        find app/build/outputs/apk/ -name "*.apk" -exec cp {} exported-apk/WhatsAppWebPro.apk \;
+        
+        # Weka mipangilio ya mtumiaji wa git kwa ajili ya kujitengenezea commit ya kiotomatiki
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        
+        # Angalia kama faili lipo ndipo ufanye git push
+        if [ -f "exported-apk/WhatsAppWebPro.apk" ]; then
+          git add exported-apk/WhatsAppWebPro.apk
+          git commit -m "Auto-upload built APK [skip ci]" || echo "Hakuna mabadiliko mapya ya commit"
+          git push origin HEAD:main || git push origin HEAD:master || echo "Push imeshindikana"
+        else
+          echo "Faili la APK halikuonekana!"
+        fi
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
