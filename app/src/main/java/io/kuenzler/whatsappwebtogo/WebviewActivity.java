@@ -266,16 +266,10 @@ public class WebviewActivity extends AppCompatActivity implements NavigationView
                 Log.d(DEBUG_TAG, url.toString());
 
                 if (url.toString().equals(WHATSAPP_HOMEPAGE_URL)){
-                    // when whatsapp somehow detects that waweb is running on a phone (e.g. trough
-                    // the user agent, but apparently somehow else), it automatically redicts to the
-                    // WHATSAPP_HOMEPAGE_URL. It's higly unlikely that a user wants to visit the
-                    // WHATSAPP_HOMEPAGE_URL from within waweb.
-                    // -> block the request and reload waweb
                     showToast(R.string.reload_required);
                     loadWhatsapp();
                     return true;
                 } else if (url.getHost().equals(WHATSAPP_WEB_BASE_URL)) {
-                    // whatsapp web request -> fine
                     return super.shouldOverrideUrlLoading(view, request);
                 } else {
                     Intent intent = new Intent(Intent.ACTION_VIEW, url);
@@ -333,18 +327,15 @@ public class WebviewActivity extends AppCompatActivity implements NavigationView
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.toggle_keyboard:
-                toggleKeyboard();
-                break;
-            case R.id.scroll_left:
-                showToast(R.string.appbar_button_scroll_left);
-                runOnUiThread(() -> mWebView.scrollTo(0, 0));
-                break;
-            case R.id.scroll_right:
-                showToast(R.string.appbar_title_scroll_right);
-                runOnUiThread(() -> mWebView.scrollTo(2000, 0));
-                break;
+        int id = item.getItemId();
+        if (id == R.id.toggle_keyboard) {
+            toggleKeyboard();
+        } else if (id == R.id.scroll_left) {
+            showToast(R.string.appbar_button_scroll_left);
+            runOnUiThread(() -> mWebView.scrollTo(0, 0));
+        } else if (id == R.id.scroll_right) {
+            showToast(R.string.appbar_title_scroll_right);
+            runOnUiThread(() -> mWebView.scrollTo(2000, 0));
         }
         return true;
     }
@@ -379,7 +370,6 @@ public class WebviewActivity extends AppCompatActivity implements NavigationView
                 break;
             case CAMERA_PERMISSION_RESULTCODE:
             case AUDIO_PERMISSION_RESULTCODE:
-                //same same
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     try {
                         mCurrentPermissionRequest.grant(mCurrentPermissionRequest.getResources());
@@ -485,7 +475,6 @@ public class WebviewActivity extends AppCompatActivity implements NavigationView
         if (enable && mMainView.getDescendantFocusability() == ViewGroup.FOCUS_BLOCK_DESCENDANTS) {
             mMainView.setDescendantFocusability(ViewGroup.FOCUS_AFTER_DESCENDANTS);
             showSnackbar(R.string.unblock_keyboard);
-            //inputMethodManager.showSoftInputFromInputMethod(activity.getCurrentFocus().getWindowToken(), 0);
         } else if (!enable) {
             mMainView.setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
             mWebView.getRootView().requestFocus();
@@ -553,7 +542,6 @@ public class WebviewActivity extends AppCompatActivity implements NavigationView
 
     @Override
     public void onBackPressed() {
-        //close drawer if open and impl. press back again to leave
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
@@ -592,13 +580,9 @@ public class WebviewActivity extends AppCompatActivity implements NavigationView
 
     public void setContentSize(final WebView mWebView){
         if (getResources().getBoolean(R.bool.isTablet)) {
-            // only change content sizes if device has a smaller screen than normally used for
-            // whatsapp web
-            // see https://stackoverflow.com/questions/9279111/determine-if-the-device-is-a-smartphone-or-tablet
             return;
         }
 
-        //ToDo: Scroll to the right. See `focusChatTextInput(e)-Method of bootstrap_qr.e002978cf4688a3eaf75.js:formatted  line 67087
         mWebView.loadUrl("javascript:(function(){" +
                 "  try { " +
                 "	var css = '.two > div:nth-child(4){flex: 1 0 100vmin;}.two{overflow:visible}'," +
@@ -632,7 +616,6 @@ public class WebviewActivity extends AppCompatActivity implements NavigationView
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
         int id = item.getItemId();
 
         if (id == R.id.appbar_hide) {
@@ -665,5 +648,4 @@ public class WebviewActivity extends AppCompatActivity implements NavigationView
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
 }
