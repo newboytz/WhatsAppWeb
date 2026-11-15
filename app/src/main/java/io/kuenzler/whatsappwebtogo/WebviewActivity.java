@@ -63,16 +63,15 @@ import java.util.Objects;
 
 public class WebviewActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    // Badilisha kwenda Microsoft Edge kwenye Windows (Desktop Engine)
+    // Microsoft Edge kwenye Windows 10/11 x64 (Master Desktop User-Agent)
     private static final String USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36 Edg/125.0.2535.92";
 
-    private static final String STORAGE_PERMISSION = Manifest.permission.WRITE_EXTERNAL_STORAGE; // "android.permission.WRITE_EXTERNAL_STORAGE"
-    private static final String CAMERA_PERMISSION = Manifest.permission.CAMERA; // "android.permission.CAMERA"
-    private static final String AUDIO_PERMISSION = Manifest.permission.RECORD_AUDIO; // "android.permission.RECORD_AUDIO"
+    private static final String STORAGE_PERMISSION = Manifest.permission.WRITE_EXTERNAL_STORAGE;
+    private static final String CAMERA_PERMISSION = Manifest.permission.CAMERA;
+    private static final String AUDIO_PERMISSION = Manifest.permission.RECORD_AUDIO;
     private static final String[] VIDEO_PERMISSION = {CAMERA_PERMISSION, AUDIO_PERMISSION};
 
     private static final String WHATSAPP_HOMEPAGE_URL = "https://www.whatsapp.com/";
-
     private static final String WHATSAPP_WEB_BASE_URL = "web.whatsapp.com";
     private static final String WORLD_ICON = "\uD83C\uDF10";
     private static final String WHATSAPP_WEB_URL = "https://" + WHATSAPP_WEB_BASE_URL
@@ -88,12 +87,9 @@ public class WebviewActivity extends AppCompatActivity implements NavigationView
     public static final String DEBUG_TAG = "WAWEBTOGO";
 
     private final Activity activity = this;
-
     private SharedPreferences mSharedPrefs;
-
     private WebView mWebView;
     private ViewGroup mMainView;
-
     private long mLastBackClick = 0;
 
     boolean mKeyboardEnabled = false;
@@ -102,7 +98,6 @@ public class WebviewActivity extends AppCompatActivity implements NavigationView
     private ValueCallback<Uri[]> mUploadMessage;
     private PermissionRequest mCurrentPermissionRequest;
     private String mCurrentDownloadRequest = null;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,10 +119,7 @@ public class WebviewActivity extends AppCompatActivity implements NavigationView
 
         mSharedPrefs = this.getSharedPreferences(this.getPackageName(), Context.MODE_PRIVATE);
         mDarkMode = mSharedPrefs.getBoolean("darkMode", false);
-
         mMainView = findViewById(R.id.layout);
-
-        // webview stuff
 
         mWebView = findViewById(R.id.webview);
 
@@ -145,16 +137,16 @@ public class WebviewActivity extends AppCompatActivity implements NavigationView
         });
         mWebView.addJavascriptInterface(new BlobDownloader(getApplicationContext()), BlobDownloader.JsInstance);
 
-        mWebView.getSettings().setJavaScriptEnabled(true); //for wa web
-        mWebView.getSettings().setAllowContentAccess(true); // for camera
+        mWebView.getSettings().setJavaScriptEnabled(true);
+        mWebView.getSettings().setAllowContentAccess(true);
         mWebView.getSettings().setAllowFileAccess(true);
         mWebView.getSettings().setAllowFileAccessFromFileURLs(true);
         mWebView.getSettings().setAllowUniversalAccessFromFileURLs(true);
-        mWebView.getSettings().setMediaPlaybackRequiresUserGesture(false); //for audio messages
+        mWebView.getSettings().setMediaPlaybackRequiresUserGesture(false);
 
-        mWebView.getSettings().setDomStorageEnabled(true); //for html5 app
+        mWebView.getSettings().setDomStorageEnabled(true);
         mWebView.getSettings().setDatabaseEnabled(true);
-        mWebView.getSettings().setAppCacheEnabled(false); // deprecated
+        mWebView.getSettings().setAppCacheEnabled(false);
         mWebView.getSettings().setCacheMode(WebSettings.LOAD_DEFAULT);
 
         mWebView.getSettings().setLoadWithOverviewMode(true);
@@ -171,14 +163,12 @@ public class WebviewActivity extends AppCompatActivity implements NavigationView
         mWebView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
         mWebView.getSettings().setNeedInitialFocus(false);
         mWebView.getSettings().setGeolocationEnabled(true);
-        // Weka Layout Algorithm kuwa NORMAL ili isilazimishe muonekano wa simu
         mWebView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NORMAL);
 
         mWebView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
         mWebView.setScrollbarFadingEnabled(true);
 
         mWebView.setWebChromeClient(new WebChromeClient() {
-
             @Override
             public boolean onCreateWindow(WebView view, boolean dialog, boolean userGesture, Message resultMsg) {
                 Toast.makeText(getApplicationContext(), "OnCreateWindow", Toast.LENGTH_LONG).show();
@@ -232,8 +222,149 @@ public class WebviewActivity extends AppCompatActivity implements NavigationView
 
         mWebView.setWebViewClient(new WebViewClient() {
 
+            // =========================================================================
+            // MASTER HARDWARE-LEVEL ANTI-FINGERPRINTING & WINDOWS SPOOFING ENGINE (35 in 1)
+            // =========================================================================
+                        private void applyMasterHardwareSpoof(WebView view) {
+                view.loadUrl("javascript:(function() {" +
+                        "   try {" +
+                        "       // 1-10: Navigator & Platform Core Signatures" +
+                        "       Object.defineProperty(navigator, 'platform', { get: function() { return 'Win32'; } });" +
+                        "       Object.defineProperty(navigator, 'vendor', { get: function() { return 'Google Inc.'; } });" +
+                        "       Object.defineProperty(navigator, 'maxTouchPoints', { get: function() { return 0; } });" +
+                        "       Object.defineProperty(navigator, 'hardwareConcurrency', { get: function() { return 16; } });" +
+                        "       Object.defineProperty(navigator, 'deviceMemory', { get: function() { return 16; } });" +
+                        "       Object.defineProperty(navigator, 'languages', { get: function() { return ['en-US', 'en']; } });" +
+                        "       Object.defineProperty(navigator, 'language', { get: function() { return 'en-US'; } });" +
+                        "       Object.defineProperty(navigator, 'pdfViewerEnabled', { get: function() { return true; } });" +
+                        "       Object.defineProperty(navigator, 'cookieEnabled', { get: function() { return true; } });" +
+                        "       Object.defineProperty(navigator, 'doNotTrack', { get: function() { return null; } });" +
+                        "" +
+                        "       // 11-20: UserAgentData & Client Hints (Windows 11 Edge Signature)" +
+                        "       if (navigator.userAgentData) {" +
+                        "           Object.defineProperty(navigator, 'userAgentData', { get: function() { " +
+                        "               return {" +
+                        "                   brands: [{brand: 'Not/A)Brand', version: '8'}, {brand: 'Microsoft Edge', version: '125'}, {brand: 'Chromium', version: '125'}]," +
+                        "                   mobile: false," +
+                        "                   platform: 'Windows'," +
+                        "                   getHighEntropyValues: function(hints) { return Promise.resolve({platform: 'Windows', platformVersion: '15.0.0', architecture: 'x86', model: '', uaFullVersion: '125.0.2535.92'}); }" +
+                        "               }; " +
+                        "           } });" +
+                        "       }" +
+                        "" +
+                        "       // 21-35: Screen, Display & Window Geometry Matrix" +
+                        "       Object.defineProperty(screen, 'width', { get: function() { return 1920; } });" +
+                        "       Object.defineProperty(screen, 'height', { get: function() { return 1080; } });" +
+                        "       Object.defineProperty(screen, 'availWidth', { get: function() { return 1920; } });" +
+                        "       Object.defineProperty(screen, 'availHeight', { get: function() { return 1040; } });" +
+                        "       Object.defineProperty(screen, 'colorDepth', { get: function() { return 24; } });" +
+                        "       Object.defineProperty(screen, 'pixelDepth', { get: function() { return 24; } });" +
+                        "       Object.defineProperty(window, 'innerWidth', { get: function() { return 1920; } });" +
+                        "       Object.defineProperty(window, 'innerHeight', { get: function() { return 955; } });" +
+                        "       Object.defineProperty(window, 'outerWidth', { get: function() { return 1920; } });" +
+                        "       Object.defineProperty(window, 'outerHeight', { get: function() { return 1040; } });" +
+                        "       Object.defineProperty(window, 'screenX', { get: function() { return 0; } });" +
+                        "       Object.defineProperty(window, 'screenY', { get: function() { return 0; } });" +
+                        "       Object.defineProperty(window, 'devicePixelRatio', { get: function() { return 1; } });" +
+                        "" +
+                        "       // 36-55: Hardware GPU & WebGL / WebGL2 Spoofing (Intel UHD & ANGLE)" +
+                        "       const hookWebGL = function(contextType) {" +
+                        "           const proto = window[contextType] && window[contextType].prototype;" +
+                        "           if (!proto) return;" +
+                        "           const getParamOrig = proto.getParameter;" +
+                        "           proto.getParameter = function(parameter) {" +
+                        "               if (parameter === 37445) { return 'Intel Inc.'; }" +
+                        "               if (parameter === 37446) { return 'ANGLE (Intel, Intel(R) UHD Graphics Direct3D11 vs_5_0 ps_5_0)'; }" +
+                        "               if (parameter === 37924) { return 'Google Inc. (Intel)'; }" +
+                        "               if (parameter === 37925) { return 'ANGLE (Intel, Intel(R) UHD Graphics Direct3D11 vs_5_0 ps_5_0, D3D11)'; }" +
+                        "               return getParamOrig.apply(this, arguments);" +
+                        "           };" +
+                        "           const getExtOrig = proto.getExtension;" +
+                        "           proto.getExtension = function(name) {" +
+                        "               if (name === 'WEBGL_debug_renderer_info') {" +
+                        "                   return { UNMASKED_VENDOR_WEBGL: 37445, UNMASKED_RENDERER_WEBGL: 37446 };" +
+                        "               }" +
+                        "               return getExtOrig.apply(this, arguments);" +
+                        "           };" +
+                        "       };" +
+                        "       hookWebGL('WebGLRenderingContext');" +
+                        "       hookWebGL('WebGL2RenderingContext');" +
+                        "" +
+                        "       // 56-70: Complete Eradication of Touch / Mobile Events & Pointers" +
+                        "       delete window.ontouchstart;" +
+                        "       delete window.ontouchmove;" +
+                        "       delete window.ontouchend;" +
+                        "       delete window.ontouchcancel;" +
+                        "       if (window.TouchEvent) { window.TouchEvent = undefined; }" +
+                        "       if (window.Touch) { window.Touch = undefined; }" +
+                        "       if (window.TouchList) { window.TouchList = undefined; }" +
+                        "" +
+                        "       const origMatchMedia = window.matchMedia;" +
+                        "       window.matchMedia = function(query) {" +
+                        "           if (query.includes('pointer: fine') || query.includes('hover: hover')) {" +
+                        "               return { matches: true, media: query, onchange: null, addListener: function(){}, removeListener: function(){}, addEventListener: function(){}, removeEventListener: function(){}, dispatchEvent: function() { return false; } };" +
+                        "           }" +
+                        "           if (query.includes('pointer: coarse') || query.includes('hover: none')) {" +
+                        "               return { matches: false, media: query, onchange: null, addListener: function(){}, removeListener: function(){}, addEventListener: function(){}, removeEventListener: function(){}, dispatchEvent: function() { return false; } };" +
+                        "           }" +
+                        "           return origMatchMedia.call(window, query);" +
+                        "       };" +
+                        "" +
+                        "       // 71-85: Desktop Plugins, MimeTypes & PDF Engine Signatures" +
+                        "       Object.defineProperty(navigator, 'plugins', {" +
+                        "           get: function() {" +
+                        "               return {" +
+                        "                   length: 3," +
+                        "                   0: { name: 'Chrome PDF Plugin', filename: 'internal-pdf-viewer', description: 'Portable Document Format', length: 1 }," +
+                        "                   1: { name: 'Chrome PDF Viewer', filename: 'mhjfbmdgcfjbbpaeojofohoefgiehjai', description: '', length: 1 }," +
+                        "                   2: { name: 'Native Client', filename: 'internal-nacl-plugin', description: '', length: 2 }," +
+                        "                   item: function(index) { return this[index]; }," +
+                        "                   namedItem: function(name) { return this[0]; }" +
+                        "               };" +
+                        "           }" +
+                        "       });" +
+                        "" +
+                        "       Object.defineProperty(navigator, 'mimeTypes', {" +
+                        "           get: function() {" +
+                        "               return {" +
+                        "                   length: 2," +
+                        "                   0: { type: 'application/pdf', suffixes: 'pdf', description: 'Portable Document Format' }," +
+                        "                   1: { type: 'text/pdf', suffixes: 'pdf', description: 'Portable Document Format' }," +
+                        "                   item: function(index) { return this[index]; }," +
+                        "                   namedItem: function(name) { return this[0]; }" +
+                        "               };" +
+                        "           }" +
+                        "       });" +
+                        "" +
+                        "       // 86-100: Advanced Anti-Fraud, AudioContext & Battery API Masking" +
+                        "       if (window.AudioContext || window.webkitAudioContext) {" +
+                        "           const AudioCtx = window.AudioContext || window.webkitAudioContext;" +
+                        "           const origCreateBuffer = AudioCtx.prototype.createBuffer;" +
+                        "           AudioCtx.prototype.createBuffer = function(channels, length, sampleRate) {" +
+                        "               return origCreateBuffer.call(this, channels, length, 44100);" +
+                        "           };" +
+                        "       }" +
+                        "" +
+                        "       if (navigator.getBattery) {" +
+                        "           navigator.getBattery = function() {" +
+                        "               return Promise.resolve({ charging: true, chargingTime: 0, dischargingTime: Infinity, level: 1, onchargingchange: null, onlevelchange: null, addEventListener: function(){}, removeEventListener: function(){} });" +
+                        "           };" +
+                        "       }" +
+                        "" +
+                        "       // Hide Selenium/Automation flags" +
+                        "       delete window.cdc_adoQpoasnfa76pfcZLmcfl_Array;" +
+                        "       delete window.cdc_adoQpoasnfa76pfcZLmcfl_Promise;" +
+                        "       delete window.cdc_adoQpoasnfa76pfcZLmcfl_Symbol;" +
+                        "       if (navigator.webdriver) { Object.defineProperty(navigator, 'webdriver', { get: function() { return false; } }); }" +
+                        "" +
+                        "   } catch(e) {}" +
+                        "})();");
+            }
+
+
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
+                applyMasterHardwareSpoof(view);
                 setContentSize(view);
                 if (mDarkMode) {
                     addDarkMode(view);
@@ -243,6 +374,7 @@ public class WebviewActivity extends AppCompatActivity implements NavigationView
             @Override
             public void onPageCommitVisible(WebView view, String url) {
                 super.onPageCommitVisible(view, url);
+                applyMasterHardwareSpoof(view);
                 setContentSize(view);
                 if (mDarkMode) {
                     addDarkMode(view);
@@ -253,18 +385,7 @@ public class WebviewActivity extends AppCompatActivity implements NavigationView
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
                 view.scrollTo(0, 0);
-
-                // Dunga JavaScript ya kujificha kuwa Windows Desktop kabisa
-                view.loadUrl("javascript:(function() {" +
-                        "   try {" +
-                        "       Object.defineProperty(navigator, 'platform', { get: function() { return 'Win32'; } });" +
-                        "       Object.defineProperty(navigator, 'vendor', { get: function() { return 'Google Inc.'; } });" +
-                        "       Object.defineProperty(navigator, 'userAgentData', { get: function() { " +
-                        "           return { brands: [{brand: 'Not/A)Brand', version: '8'}, {brand: 'Microsoft Edge', version: '125'}, {brand: 'Chromium', version: '125'}], mobile: false, platform: 'Windows' }; " +
-                        "       } });" +
-                        "   } catch(e) {}" +
-                        "})();");
-
+                applyMasterHardwareSpoof(view);
                 setContentSize(view);
                 if (mDarkMode) {
                     addDarkMode(view);
@@ -316,7 +437,6 @@ public class WebviewActivity extends AppCompatActivity implements NavigationView
 
         mKeyboardEnabled = mSharedPrefs.getBoolean("keyboardEnabled", true);
         setAppbarEnabled(mSharedPrefs.getBoolean("appbarEnabled", true));
-
         setKeyboardEnabled(mKeyboardEnabled);
 
         showIntroInfo();
@@ -510,7 +630,6 @@ public class WebviewActivity extends AppCompatActivity implements NavigationView
     private void toggleDarkMode() {
         boolean currentState = mSharedPrefs.getBoolean("darkMode", false);
         mSharedPrefs.edit().putBoolean("darkMode", !currentState).apply();
-
         Log.d(DEBUG_TAG, "Dark Mode Enabled: " + !currentState);
         recreate();
     }
