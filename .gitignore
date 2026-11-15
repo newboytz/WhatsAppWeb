@@ -15,7 +15,7 @@ bin/
 gen/
 out/
 release/
-exported-apk/
+#exported-apk/
 
 # Gradle files
 .gradle/
