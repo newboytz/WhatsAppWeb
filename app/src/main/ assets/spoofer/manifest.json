@@ -1,0 +1,13 @@
+{
+  "manifest_version": 2,
+  "name": "WAWebToGo Desktop Spoofer",
+  "version": "1.0",
+  "content_scripts": [
+    {
+      "matches": ["*://*://*"],
+      "js": ["spoof.js"],
+      "run_at": "document_start",
+      "all_frames": true
+    }
+  ]
+}
