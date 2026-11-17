@@ -44,6 +44,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.11.0'
 
-    // Tumia toleo hili thabiti la 125 au 120 ambalo lipo kwenye Maven ya Mozilla
-    implementation "org.mozilla.geckoview:geckoview:120.0.20231129193230"
+    // Tumia toleo hili la ESR 115 ambalo lipo kwenye Maven ya Mozilla bila kufutwa haraka
+    implementation "org.mozilla.geckoview:geckoview-night70:115.0"
 }
+
