@@ -9,9 +9,8 @@
     tools:context="io.kuenzler.whatsappwebtogo.WebviewActivity"
     tools:showIn="@layout/app_bar_main">
 
-    <WebView
-        android:id="@+id/webview"
+    <org.mozilla.geckoview.GeckoView
+        android:id="@+id/geckoview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:windowSoftInputMode="adjustResize" />
+        android:layout_height="match_parent" />
 </FrameLayout>
