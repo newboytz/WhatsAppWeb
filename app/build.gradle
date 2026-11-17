@@ -6,7 +6,7 @@ android {
     compileSdkVersion 29
     defaultConfig {
         applicationId "io.kuenzler.whatsappwebtogo"
-        minSdkVersion 21
+        minSdkVersion 26 // Lazima iwe 26 au zaidi ili kusoma GeckoView
         targetSdkVersion 29
         versionCode 39
         versionName "1.7.7"
@@ -31,4 +31,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.3.0'
     implementation 'com.google.android.material:material:1.3.0'
     implementation 'androidx.webkit:webkit:1.4.0'
+    
+    // Injini rasmi ya Mozilla GeckoView kwa ajili ya Firefox Desktop Engine[span_2](start_span)[span_2](end_span)
+    implementation "org.mozilla.geckoview:geckoview:159.0.20261022150525"
 }
