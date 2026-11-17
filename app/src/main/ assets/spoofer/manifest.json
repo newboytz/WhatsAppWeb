@@ -4,7 +4,10 @@
   "version": "1.0",
   "content_scripts": [
     {
-      "matches": ["*://*://*"],
+      "matches": [
+        "https://web.whatsapp.com/*",
+        "https://*.whatsapp.com/*"
+      ],
       "js": ["spoof.js"],
       "run_at": "document_start",
       "all_frames": true
