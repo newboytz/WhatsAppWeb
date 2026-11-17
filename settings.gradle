@@ -1,1 +1,19 @@
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+        // Hazina maalum ya Mozilla kwa ajili ya GeckoView
+        maven { url "https://maven.mozilla.org/maven2/" }
+    }
+}
+
+rootProject.name = "WhatsApp Web To Go"
 include ':app'
